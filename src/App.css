@@ -1,42 +1,139 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* =========================
+   Perusfontti ja tausta
+========================= */
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   Linkit
+========================= */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+/* =========================
+   Body ja keskitys
+========================= */
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  /* keskittää horisontaalisesti */
+  align-items: flex-start;
+  /* ylhäältä alas */
+  min-height: 100vh;
+  padding-top: 50px;
+  /* tilaa lomakkeelle ylhäällä */
+  background-color: #242424;
+  color: #fff;
+}
+
+/* =========================
+   Otsikot
+========================= */
+h1 {
+  font-size: 2.5em;
+  line-height: 1.1;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* =========================
+   Inputit, selectit ja napit
+========================= */
+input,
+select,
+button {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+button {
+  background-color: #1a1a1a;
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+  background-color: #333;
+}
+
+/* =========================
+   Taulukko
+========================= */
+table {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+}
+
+th,
+td {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+}
+
+td button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+/* Värit tuloksille */
+td.amount-income {
+  color: #4caf50;
+  /* vihreä tuloille */
+}
+
+td.amount-expense {
+  color: #f44336;
+  /* punainen kuluja varten */
+}
+
+/* =========================
+   Media Queries
+========================= */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
   }
-  to {
-    transform: rotate(360deg);
+
+  a:hover {
+    color: #747bff;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  button {
+    background-color: #f9f9f9;
+    color: #000;
   }
-}
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  table,
+  th,
+  td {
+    border-color: #999;
+    color: #000;
+  }
 }
