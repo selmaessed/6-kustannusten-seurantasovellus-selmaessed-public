@@ -1,8 +1,9 @@
 import BudgetTracker from "./BudgetTracker";
-import "./App.css";
 
-function App() {
-  return <BudgetTracker />;
+export default function App() {
+  return (
+    <div>
+      <BudgetTracker />
+    </div>
+  );
 }
-
-export default App;

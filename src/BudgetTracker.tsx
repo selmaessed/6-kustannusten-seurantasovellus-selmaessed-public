@@ -40,22 +40,33 @@ export default function BudgetTracker() {
       <input
         placeholder="Description"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setDescription(e.target.value)
+        }
       />
       <input
         type="number"
         placeholder="Amount"
         value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setAmount(Number(e.target.value))
+        }
       />
-      <select value={type} onChange={(e) => setType(e.target.value as any)}>
+      <select
+        value={type}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+          setType(e.target.value as "Income" | "Expense")
+        }
+      >
         <option value="Income">Income</option>
         <option value="Expense">Expense</option>
       </select>
       <input
         type="date"
         value={date}
-        onChange={(e) => setDate(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setDate(e.target.value)
+        }
       />
       <button onClick={handleAdd}>Add</button>
 
