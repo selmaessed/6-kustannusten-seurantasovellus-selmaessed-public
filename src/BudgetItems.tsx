@@ -1,8 +1,7 @@
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid"; // type-only import
+import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"; // type-only import
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { BudgetItem } from "./types";
-import { useState } from "react";
 
 type BudgetItemProps = {
   items: BudgetItem[];
@@ -10,32 +9,29 @@ type BudgetItemProps = {
 };
 
 function BudgetItems({ items, onDelete }: BudgetItemProps) {
-  const [filterType, setFilterType] = useState<"All" | "Income" | "Expense">("All");
-
-  // Suodatetaan rivit valinnan mukaan
-  const filteredItems =
-    filterType === "All" ? items : items.filter((item) => item.type === filterType);
-
-  const columns: GridColDef<BudgetItem>[] = [
+  const columns: GridColDef<BudgetItem, any>[] = [
     { field: "description", headerName: "Description", width: 200, sortable: true },
     {
       field: "amount",
       headerName: "Amount",
       width: 150,
       sortable: true,
-      renderCell: ({ value }) => (
-        <span style={{ color: Number(value) < 0 ? "red" : "green" }}>{value}</span>
-      ),
+      renderCell: (params: GridRenderCellParams<any, BudgetItem>) => {
+        const value = params.row.amount; // aina ota row.amount, ei params.value
+        return <span style={{ color: value < 0 ? "red" : "green" }}>{value}</span>;
+      },
     },
     {
       field: "date",
       headerName: "Date",
       width: 150,
       sortable: true,
-      valueFormatter: ({ value }) =>
-        value ? new Date(value as string).toISOString().split("T")[0] : "",
+      valueFormatter: (params: GridRenderCellParams<any, BudgetItem>) => {
+        const value = params.row.date;
+        return value ? new Date(value).toISOString().split("T")[0] : "";
+      },
     },
-    { field: "type", headerName: "Type", width: 120, sortable: true },
+    { field: "type", headerName: "Type", width: 120 },
     {
       field: "actions",
       type: "actions",
@@ -51,26 +47,13 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
   ];
 
   return (
-    <div style={{ height: 600, width: "75%", margin: "auto", marginTop: 30 }}>
-      {/* Filter-valikko */}
-      <div style={{ marginBottom: 10, textAlign: "center" }}>
-        <label>Show: </label>
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value as any)}>
-          <option value="All">All</option>
-          <option value="Income">Income</option>
-          <option value="Expense">Expense</option>
-        </select>
-      </div>
-
+    <div style={{ height: 500, width: "70%", margin: "auto", marginTop: 30 }}>
       <DataGrid
-        rows={filteredItems}
+        rows={items}
         columns={columns}
         getRowId={(row) => row.id}
         pageSizeOptions={[5, 10, 20]}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5, page: 0 } },
-          sorting: { sortModel: [{ field: "type", sort: "asc" }] }, // Income ensin
-        }}
+        initialState={{ pagination: { paginationModel: { pageSize: 5, page: 0 } } }}
         autoHeight
       />
     </div>
