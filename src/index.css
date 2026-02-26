@@ -6,7 +6,9 @@ body {
   text-align: center;
 }
 
-input, select, button {
+input,
+select,
+button {
   margin: 5px;
   padding: 5px 10px;
   font-size: 1em;
@@ -17,7 +19,8 @@ table {
   width: 80%;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #fff;
 }
 
@@ -27,7 +30,7 @@ button {
   color: #fff;
   border-radius: 5px;
 }
+
 button:hover {
   border-color: #646cff;
 }
-

@@ -1,42 +1,66 @@
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import type { BudgetItem } from "./types";
 
-type Props = {
+type BudgetItemProps = {
   items: BudgetItem[];
   onDelete: (id: number) => void;
 };
 
-export default function BudgetItems({ items, onDelete }: Props) {
+function BudgetItems(props: BudgetItemProps) {
+  const columns: GridColDef<BudgetItem>[] = [
+    {
+      field: "description",
+      headerName: "Description",
+      width: 200,
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      width: 150,
+      renderCell: ({ value }) => (
+        <span style={{ color: Number(value) < 0 ? "red" : "green" }}>
+          {value}
+        </span>
+      ),
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      width: 150,
+      valueFormatter: ({ value }) =>
+        value ? new Date(value as string).toISOString().split("T")[0] : "",
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      width: 120,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => props.onDelete(params.id as number)}
+        />,
+      ],
+    },
+  ];
+
   return (
-    <div style={{ marginTop: "30px" }}>
-      <table style={{ margin: "0 auto", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th style={{ padding: "5px 15px" }}>Description</th>
-            <th style={{ padding: "5px 15px" }}>Amount</th>
-            <th style={{ padding: "5px 15px" }}>Date</th>
-            <th style={{ padding: "5px 15px" }}>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td style={{ padding: "5px 15px" }}>{item.description}</td>
-              <td
-                style={{
-                  padding: "5px 15px",
-                  color: item.amount < 0 ? "red" : "green",
-                }}
-              >
-                {item.amount}
-              </td>
-              <td style={{ padding: "5px 15px" }}>{item.date}</td>
-              <td style={{ padding: "5px 15px" }}>
-                <button onClick={() => onDelete(item.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ height: 500, width: "70%", margin: "auto", marginTop: 30 }}>
+      <DataGrid
+        rows={props.items}
+        columns={columns}
+        getRowId={(row) => row.id}
+        autoPageSize
+      />
     </div>
   );
 }
+
+export default BudgetItems;
