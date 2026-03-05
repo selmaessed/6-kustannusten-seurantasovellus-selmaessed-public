@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"; // type-only import
+import type { GridColDef, GridRenderCellParams, GridRowParams } from "@mui/x-data-grid"; // type-only import
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { BudgetItem } from "./types";
 
@@ -9,13 +9,13 @@ type BudgetItemProps = {
   onDelete: (id: number) => void;
 };
 
-function BudgetItems({ items, onDelete }: BudgetItemProps) {
+export default function BudgetItems({ items, onDelete }: BudgetItemProps) {
   const [filterType, setFilterType] = useState<"All" | "Income" | "Expense">("All");
 
   const filteredItems =
     filterType === "All" ? items : items.filter((item) => item.type === filterType);
 
-  const columns: GridColDef<BudgetItem, string | number>[] = [
+  const columns: GridColDef<BudgetItem, any>[] = [
     {
       field: "description",
       headerName: "Description",
@@ -27,8 +27,8 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
       headerName: "Amount",
       width: 150,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<BudgetItem, string | number>) => {
-        const value = Number(params.row.amount); // muunna aina numeroon
+      renderCell: (params: GridRenderCellParams<BudgetItem>) => {
+        const value = Number(params.row?.amount ?? 0);
         return <span style={{ color: value < 0 ? "red" : "green" }}>{value}</span>;
       },
     },
@@ -37,9 +37,14 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
       headerName: "Date",
       width: 150,
       sortable: true,
-      valueFormatter: (params: GridRenderCellParams<BudgetItem, string | number>) => {
-        const value = params.row.date;
-        return value ? new Date(value).toISOString().split("T")[0] : "";
+      valueFormatter: (params: GridRenderCellParams<BudgetItem>) => {
+        const date = params.row?.date ?? "";
+        if (!date) return "";
+        try {
+          return new Date(date).toISOString().split("T")[0];
+        } catch {
+          return "";
+        }
       },
     },
     {
@@ -52,8 +57,9 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      getActions: (params) => [
+      getActions: (params: GridRowParams<BudgetItem>) => [
         <GridActionsCellItem
+          key="delete"
           icon={<DeleteIcon />}
           label="Delete"
           onClick={() => onDelete(params.id as number)}
@@ -68,7 +74,7 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
         <label>Show: </label>
         <select
           value={filterType}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+          onChange={(e) =>
             setFilterType(e.target.value as "All" | "Income" | "Expense")
           }
         >
@@ -92,5 +98,3 @@ function BudgetItems({ items, onDelete }: BudgetItemProps) {
     </div>
   );
 }
-
-export default BudgetItems;
