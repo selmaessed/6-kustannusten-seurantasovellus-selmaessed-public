@@ -1,7 +1,7 @@
 [Suomenkielinen tehtävänanto (README.fi.md)](README.fi.md)
 
 # Budget Tracker (Total 12 points)
-
+Trigger GitHub Actions for Step4
 Create a simple Budget Tracker built with React and TypeScript. This assignment contains multiple steps (sub assignments) and these are divided to multiple weeks.
 
 ## Step 1 (3 points)
